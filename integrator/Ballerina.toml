@@ -1,0 +1,11 @@
+[package]
+org = "choreo"
+name = "integrator"
+version = "1.1.0"
+export = ["integrator"]
+distribution = "2201.0.1"
+keywords = ["Type/RestApi","Category/Service","Internal/http"]
+icon = "docs/icon.png"
+
+[build-options]
+observabilityIncluded = true
