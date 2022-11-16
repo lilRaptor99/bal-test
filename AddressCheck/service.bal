@@ -1,6 +1,6 @@
 import ballerina/http;
 
-type Citizen record {
+public type Citizen record {
     string id;
     string first_name;
     string middle_names;
@@ -15,11 +15,11 @@ service / on new http:Listener(9090) {
         return "OK";
     }
 
-    resource function get citizens() returns Citizen[]|http:Conflict {
+    isolated resource function get citizens() returns Citizen[]|http:Conflict {
         return getAllCitizenData();
     }
 
-    resource function get citizen/[string id]() returns Citizen|http:NotFound {
+    isolated resource function get citizen/[string id]() returns Citizen|http:NotFound {
         Citizen? citizen = getCitizenData(id);
 
         if (citizen is null) {
@@ -31,7 +31,7 @@ service / on new http:Listener(9090) {
     }
 }
 
-table<Citizen> citizenData = table [
+public final Citizen[] & readonly citizenData = [
     {id: "992383845V", first_name: "Pratheek", middle_names: "", last_name: "Senevirathne", dob: "1999-08-26", gender: "M", address: "200/4, 1st Lane, Rajagiriya"},
     {id: "990012912V", first_name: "Jolene", middle_names: "", last_name: "Robelin", dob: "1999-07-20", gender: "F", address: "587 Prairieview Plaza"},
     {id: "995619139V", first_name: "Angy", middle_names: "", last_name: "Boulter", dob: "1999-07-06", gender: "F", address: "4 Ramsey Circle"},
@@ -40,15 +40,22 @@ table<Citizen> citizenData = table [
     {id: "991777277V", first_name: "Drew", middle_names: "", last_name: "Fowle", dob: "1999-04-07", gender: "M", address: "3 Algoma Way"}
 ];
 
-function getAllCitizenData() returns Citizen[] {
-    return citizenData.toArray();
+isolated function getAllCitizenData() returns Citizen[] {
+    Citizen[] citizens;
+    lock {
+        citizens = citizenData;
+    }
+    return citizens;
 }
 
-function getCitizenData(string id) returns Citizen? {
+isolated function getCitizenData(string id) returns Citizen? {
 
-    Citizen[] matchedCitizens = from Citizen citizen in citizenData
-        where citizen.id == id
-        select citizen;
+    Citizen[] matchedCitizens;
+    lock {
+        matchedCitizens = from Citizen citizen in citizenData
+            where citizen.id == id
+            select citizen;
+    }
 
     return matchedCitizens.length() > 0 ? matchedCitizens[0] : null;
 }
