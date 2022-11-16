@@ -12,7 +12,7 @@ public type Citizen record {
 
 service / on new http:Listener(9090) {
     resource function get health() returns string {
-        return "OMKY";
+        return "OK";
     }
 
     isolated resource function get citizens() returns Citizen[]|http:Conflict {
