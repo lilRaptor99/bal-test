@@ -10,13 +10,13 @@ COPY package*.json ./
 
 RUN npm install
 
-RUN mkdir temp
+RUN mkdir -p /usr/src/app/temp
 
 # Bundle app source
 COPY . .
 
 # Set a non-root user
-USER 10014
+# USER 10014
 
 EXPOSE 8080
 
