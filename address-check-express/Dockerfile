@@ -10,6 +10,8 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN mkdir temp
+
 # Bundle app source
 COPY . .
 
