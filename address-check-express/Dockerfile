@@ -15,8 +15,12 @@ RUN mkdir -p /usr/src/app/temp
 # Bundle app source
 COPY . .
 
+RUN chown -R 10014 /usr/src/app
+
 # Set a non-root user
-# USER 10014
+USER 10014
+
+RUN touch /usr/src/app/temp/addresses.txt
 
 EXPOSE 8080
 
