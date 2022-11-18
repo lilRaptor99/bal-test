@@ -1,26 +1,19 @@
 FROM node:18-alpine
 
-# Create app directory
-WORKDIR /usr/src/app
+RUN addgroup app && adduser -S -G app app
+RUN mkdir /app && chown -R app:app /app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+USER app
 
-RUN npm install
+WORKDIR /app
 
-RUN mkdir -p /usr/src/app/temp
+COPY --chown=app:app package*.json ./
+RUN npm ci
+COPY --chown=app:app . .
 
-# Bundle app source
-COPY . .
+RUN mkdir -p /app/temp
 
-RUN chown -R 10014 /usr/src/app
-
-# Set a non-root user
-USER 10014
-
-RUN touch /usr/src/app/temp/addresses.txt
+RUN touch /app/temp/addresses.txt
 
 EXPOSE 8080
 
