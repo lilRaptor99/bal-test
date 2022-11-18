@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN chmod 777 /tmp
+
 USER 10014
 
 RUN touch /tmp/addresses.txt
