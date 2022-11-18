@@ -33,7 +33,7 @@ app.post("/api/uploadImage", async (req, res) => {
   // The name of the input field (i.e. "file") is used to retrieve the uploaded file
   file = req.files.file;
   // @ts-ignore
-  uploadPath = './temp/' + Math.random() + file.name;
+  uploadPath = '/tmp/' + Math.random() + file.name;
 
 
   // Use the mv() method to place the file somewhere on your server

@@ -1,19 +1,16 @@
 FROM node:18-alpine
 
-RUN addgroup app && adduser -S -G app app
-RUN mkdir /app && chown -R app:app /app
+WORKDIR /usr/src/app
 
-USER app
+COPY package*.json ./
 
-WORKDIR /app
+RUN npm install
 
-COPY --chown=app:app package*.json ./
-RUN npm ci
-COPY --chown=app:app . .
+COPY . .
 
-RUN mkdir -p /app/temp
+USER 10014
 
-RUN touch /app/temp/addresses.txt
+RUN touch /tmp/addresses.txt
 
 EXPOSE 8080
 
